@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('content')
     <div class="container">
@@ -55,6 +55,10 @@
 
                                 </div>
                             </div>
+
+                            <a class="btn btn-link link_registration" href="{{ url('/') }}">
+                                login
+                            </a>
                         </form>
                     </div>
                 </div>
