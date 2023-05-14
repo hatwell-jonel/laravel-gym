@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\Helpers;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -29,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -50,8 +51,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'username' => ['required', 'string', 'min:5', 'max:25', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'max:25', 'confirmed'],
         ]);
     }
 
@@ -63,10 +64,22 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'user_id' =>  rand(100,1000),
-            'password' => Hash::make($data['password']),
-        ]);
+        $IDGenerator  = Helpers::IDGenerator(new User,'user_id', 3, "ADM-", 'A');
+        $result = array('status' => 1, 'message' => 'success');
+
+        $user = new User();
+        $user->username = $data['username'];
+        $user->user_id = $IDGenerator;
+        $user->password = Hash::make($data['password']);
+        $user->save();
+        
+
+        return $result;
+
+        // return User::create([
+        //     'username' => $data['username'],
+        //     'user_id' =>  rand(100,1000),
+        //     'password' => Hash::make($data['password']),
+        // ]);
     }
 }
