@@ -39,7 +39,8 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        //
+        // redirect guess to this URL if not authenticated
+        Route::redirect('/', '/login');
     }
 
     /**
